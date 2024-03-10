@@ -13,3 +13,9 @@ for (let i = 0; i < accountArr.length; i++) {
         console.log( accountArr[i] + ' không hợp lệ');
     }
 }
+for (const key in object) {
+    if (Object.hasOwnProperty.call(object, key)) {
+        const element = object[key];
+        
+    }
+}
