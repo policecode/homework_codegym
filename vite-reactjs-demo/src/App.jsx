@@ -1,17 +1,20 @@
 import { useState } from 'react';
 
-import HomePage from './pages/HomePage';
-import AboutPage from './pages/AboutPage';
+import RenderData from './pages/RenderData';
+import AppClass from './components/class/AppClass';
+import AppFunc from './components/hook/AppFunc';
 
 function App() {
-  
 
   return (
     <>
-      <HomePage />
-      {/* <AboutPage /> */}
+      {/* <AppClass /> */}
+      <RenderData />
+    {/* <AppFunc /> */}
     </>
   )
 }
+<style>
 
+</style>
 export default App
