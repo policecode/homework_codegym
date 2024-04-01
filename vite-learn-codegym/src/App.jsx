@@ -12,7 +12,7 @@ function App() {
      {/* <Alert text="Cảnh báo! Tài nguyên bạn vừa truy cập không tồn tại." /> */}
      {/* <StudentInfo /> */}
      {/* <ExpandCollapse /> */}
-     <Calculate />
+     {/* <Calculate /> */}
     </>
   )
 }

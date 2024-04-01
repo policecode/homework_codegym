@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { Bs0CircleFill } from "react-icons/bs";
 /**
  * Hook (Function) ~ ClassCoponent
  * useEffect ~ componentDidMount(), componentWillUnmount(), componentDidUpdate()
@@ -16,19 +17,19 @@ import { useState } from 'react';
  */
 
 function AppFunc(props) {
-    // console.log('first');
-    // const {type} = props;
-    const [count, setCount] = useState(0);
-    let increment = () => {
-        // console.log('two');
-        setCount(count+1)
-    }
+  // console.log('first');
+  // const {type} = props;
+  const [count, setCount] = useState(0);
+  let increment = () => {
+    // console.log('two');
+    setCount(count + 1)
+  }
   return (
     <>
-        <div className="container">
-            <h1>{count}</h1>
-            <button onClick={increment} className='btn btn-success'>Increment </button>
-        </div>
+      <div className="container">
+        <h1>{count} <Bs0CircleFill className='text-danger' /></h1>
+        <button onClick={increment} className='btn btn-success'>Increment </button>
+      </div>
     </>
   )
 }

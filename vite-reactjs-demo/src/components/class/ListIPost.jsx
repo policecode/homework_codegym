@@ -4,7 +4,6 @@ export default class ListPost extends Component {
         super(props);
         this.state = {
             data: [],
-            detail: {},
             skip: 0,
             limit: 20,
             page: 1,
@@ -28,7 +27,7 @@ export default class ListPost extends Component {
     // }
     getItems = async (action = '') => {
         // console.log(this.state);
-        let response = await fetch(`https://dummyjson.com/post?limit=` + this.state.limit + '&skip=' + this.state.skip)
+        let response = await fetch(`https://dummyjson.com/post?limit=${this.state.limit}&skip=${this.state.skip}`)
         let result = await response.json()
 
         // console.log(result);
@@ -43,27 +42,25 @@ export default class ListPost extends Component {
     }
     next = (e) => {
         e.preventDefault();
-        if (this.state.page == this.state.totalPage) {
-            return;
+        if (this.state.page < this.state.totalPage) {
+            let newPage = this.state.page + 1;
+            this.setState({
+                ...this.state,
+                skip: (newPage - 1) * this.state.limit,
+                page: newPage
+            });
         }
-        let newPage = this.state.page + 1;
-        this.setState({
-            ...this.state,
-            skip: (newPage - 1) * this.state.limit,
-            page: newPage
-        });
     }
     prev = (e) => {
         e.preventDefault();
-        if (this.state.page == 1) {
-            return;
+        if (this.state.page > 1) {
+            let newPage = this.state.page - 1;
+            this.setState({
+                ...this.state,
+                skip: (newPage - 1) * this.state.limit,
+                page: newPage
+            });
         }
-        let newPage = this.state.page - 1;
-        this.setState({
-            ...this.state,
-            skip: (newPage - 1) * this.state.limit,
-            page: newPage
-        });
     }
     changeLimit = (e) => {
         this.setState({
@@ -99,8 +96,6 @@ export default class ListPost extends Component {
                                 </div>
                             ))
                         }
-
-
                     </div>
                 </div>
 
