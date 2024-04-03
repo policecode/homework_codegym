@@ -23,21 +23,21 @@ export default class RenderData extends Component {
                             <ul className="navbar-nav">
                                 <li className="nav-item">
                                     <a 
-                                        onClick={()=> this.setState({screen: 'smartphones'})}
+                                        // onClick={()=> this.setState({screen: 'smartphones'})}
                                         className={(this.state.screen == 'smartphones'? 'active':'') + " nav-link"}
                                         href="#"
                                     >SmartPhones</a>
                                 </li>
                                 <li className="nav-item">
                                     <a 
-                                        onClick={()=> this.setState({screen: 'laptops'})}
+                                        // onClick={()=> this.setState({screen: 'laptops'})}
                                         className={(this.state.screen == 'laptops'? 'active':'') + " nav-link"}
                                         href="#"
                                     >Laptops</a>
                                 </li>
                                 <li className="nav-item">
                                     <a 
-                                        onClick={()=> this.setState({screen: 'skincare'})}
+                                        // onClick={()=> this.setState({screen: 'skincare'})}
                                         className={(this.state.screen == 'skincare'? 'active':'') + " nav-link"}
                                         href="#"
                                     >Skincare</a>
@@ -49,6 +49,7 @@ export default class RenderData extends Component {
                 </nav>
 
                 {/* <ListItem category={this.state.screen}/> */}
+                {}
                 <ListPost category={this.state.screen} />
             </>
         );

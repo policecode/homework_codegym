@@ -1,9 +1,12 @@
 import { useState } from 'react';
+import GetItemsByCat from './pages/GetItemsByCat';
 
-import RenderData from './pages/RenderData';
-import AppClass from './components/class/AppClass';
-import AppFunc from './components/hook/AppFunc';
-import TaskApp from './pages/TaskApp';
+// import RenderData from './pages/RenderData';
+// import AppClass from './components/class/AppClass';
+// import AppFunc from './components/hook/AppFunc';
+// import TaskApp from './pages/TaskApp';
+// import LearnUseEffect from './pages/LearnUseEffect';
+// import LearnUseEffect from './pages/LearnUseEffect';
 
 function App() {
 
@@ -11,8 +14,10 @@ function App() {
     <>
       {/* <AppClass /> */}
       {/* <RenderData /> */}
-    {/* <AppFunc /> */}
-    <TaskApp />
+      {/* <AppFunc /> */}
+      {/* <TaskApp /> */}
+      {/* <LearnUseEffect /> */}
+      <GetItemsByCat />
     </>
   )
 }
