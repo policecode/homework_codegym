@@ -3,6 +3,10 @@ import Alert from './component/Alert'
 import StudentInfo from './component/StudentInfo'
 import ExpandCollapse from './component/ExpandCollapse'
 import Calculate from './component/Calculate'
+import Authentication from './pages/Authentication'
+import MyClock from './component/MyClock'
+import Car from './pages/Car'
+import Timer from './pages/Timer'
 
 function App() {
   // const [count, setCount] = useState(0)
@@ -13,6 +17,10 @@ function App() {
      {/* <StudentInfo /> */}
      {/* <ExpandCollapse /> */}
      {/* <Calculate /> */}
+     {/* <Authentication /> */}
+     {/* <MyClock /> */}
+     {/* <Car /> */}
+     <Timer />
     </>
   )
 }
