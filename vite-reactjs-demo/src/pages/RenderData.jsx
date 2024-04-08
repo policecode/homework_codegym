@@ -1,6 +1,7 @@
 import { Component } from "react";
-import ListItem from "../components/class/ListItem";
+// import ListItem from "../components/class/ListItem";
 import ListPost from "../components/class/ListIPost";
+import ListProduct from "../components/hook/ListProduct";
 export default class RenderData extends Component {
     constructor(props) {
         super(props);
@@ -49,8 +50,7 @@ export default class RenderData extends Component {
                 </nav>
 
                 {/* <ListItem category={this.state.screen}/> */}
-                {}
-                <ListPost category={this.state.screen} />
+                <ListProduct />
             </>
         );
 
