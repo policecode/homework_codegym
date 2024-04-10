@@ -63,6 +63,29 @@ export default function ListProduct(props) {
         setDirection('');
     }
 
+    let getViewPage = (show = 2) => {
+        /**
+         * show: Số đơn vị nhìn về phía trước và phía sau của page active 
+         */
+        let start = 0;
+        let end = 0;
+        let pageArr = [];
+        if(page - show <= 1) {
+            start = 1;
+        } else {
+            start = page - show;
+        }
+
+        if (page + show >= totalPage) {
+            end = totalPage;
+        } else {
+            end = page + show;
+        }
+        for (let i = start; i <= end; i++) {
+            pageArr.push(i);
+        }
+        return pageArr;
+    }
     return (
         <div className="container">
             <div className="text-center">
@@ -107,11 +130,11 @@ export default function ListProduct(props) {
                             className="page-link" href="#">Previous</a>
                     </li>
                     {
-                        (new Array(totalPage)).fill(0).map((item, index) => (
-                            <li className={`${page == index + 1?'active': ''} page-item`}>
+                        getViewPage().map((item) => (
+                            <li key={item} className={`${page == item?'active': ''} page-item`}>
                             <a
-                                onClick={(e) => changePage(e, index + 1)}
-                                className="page-link" href="#">{index + 1}</a>
+                                onClick={(e) => changePage(e, item)}
+                                className="page-link" href="#">{item}</a>
                             </li>
                         ))
                     }

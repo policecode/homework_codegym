@@ -2,6 +2,9 @@ import { useState } from 'react';
 import GetItemsByCat from './pages/GetItemsByCat';
 
 import RenderData from './pages/RenderData';
+import Form from './pages/Form';
+import Formik from './pages/Formik';
+import FormikRegister from './pages/FormikRegister';
 // import AppClass from './components/class/AppClass';
 // import AppFunc from './components/hook/AppFunc';
 // import TaskApp from './pages/TaskApp';
@@ -13,11 +16,14 @@ function App() {
   return (
     <>
       {/* <AppClass /> */}
-      <RenderData />
+      {/* <RenderData /> */}
       {/* <AppFunc /> */}
       {/* <TaskApp /> */}
       {/* <LearnUseEffect /> */}
       {/* <GetItemsByCat /> */}
+      {/* <Form /> */}
+      {/* <FormikRegister /> */}
+      <FormikRegister />
     </>
   )
 }
