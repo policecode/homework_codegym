@@ -1,32 +1,27 @@
-import { useState } from 'react';
-import GetItemsByCat from './pages/GetItemsByCat';
+import CreateProductPagev2 from './pages/CreateProductPagev2';
 
-import RenderData from './pages/RenderData';
-import Form from './pages/Form';
-import Formik from './pages/Formik';
-import FormikRegister from './pages/FormikRegister';
-import CreateProductPage from './pages/CreateProductPage';
-// import AppClass from './components/class/AppClass';
-// import AppFunc from './components/hook/AppFunc';
-// import TaskApp from './pages/TaskApp';
-// import LearnUseEffect from './pages/LearnUseEffect';
-// import LearnUseEffect from './pages/LearnUseEffect';
-
+import { Routes, Route } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import Navbar from './components/hook/Navbar';
+import NotFound from './pages/NotFound';
+import Slug from './components/hook/Slug';
+/**
+ * <Route path="*" element={<NotFound />} /> : Trường hợp đường dẫn không tồn tại
+ */
 function App() {
 
   return (
-    <>
-      {/* <AppClass /> */}
-      {/* <RenderData /> */}
-      {/* <AppFunc /> */}
-      {/* <TaskApp /> */}
-      {/* <LearnUseEffect /> */}
-      {/* <GetItemsByCat /> */}
-      {/* <Form /> */}
-      {/* <FormikRegister /> */}
-      {/* <FormikRegister /> */}
-      <CreateProductPage />
-    </>
+    <div className='container' >
+      {/* <Navbar />
+      <Routes>
+        <Route path="/" element={<HomePage />} />
+        <Route path="/create-product" element={<CreateProductPagev2 />} />
+        <Route path="/new/:slug" element={<Slug />} />
+        <Route path="*" element={<NotFound />} /> 
+
+      </Routes> */}
+      <CreateProductPagev2 />
+    </div>
   )
 }
 <style>
