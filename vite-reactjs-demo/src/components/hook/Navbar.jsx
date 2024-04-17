@@ -21,6 +21,12 @@ export default function Navbar(props) {
               <li className="nav-item">
                 <NavLink to={'/create-product'} className="nav-link" aria-current="page" >Create</NavLink>
               </li>
+              <li className="nav-item">
+                <NavLink to={'/department'} className="nav-link" aria-current="page" >Department</NavLink>
+              </li>
+              <li className="nav-item">
+                <NavLink to={'/students'} className="nav-link" aria-current="page" >Students</NavLink>
+              </li>
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Dropdown
