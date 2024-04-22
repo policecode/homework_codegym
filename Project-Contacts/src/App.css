@@ -1,0 +1,9 @@
+.fvn-image {
+    height: 200px;
+    /* drop hình ảnh cho đều */
+    object-fit: cover;
+}
+.bg-top-one {
+    background-color: #303030;
+    color: #eeeeee;
+}
