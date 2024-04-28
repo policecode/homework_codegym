@@ -1,21 +1,43 @@
 import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
-
+import { URL_API } from '../../utils/const';
 import avatarDefault from '../../assets/image/guest-user.webp';
+import axios from 'axios';
+import { faker } from '@faker-js/faker';
+import dayjs from 'dayjs';
+import { toast } from 'react-toastify';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 const schema = yup.object({
   name: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
-  birthday: yup.string(),
+  birthday: yup.string().required('Không được để trống'),
   company_name: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
   department: yup.string().required('Không được để trống'),
-  job_title: '',
-  phone: '',
+  job_title: yup.string().required('Không được để trống'),
+  phone: yup.string().required('Không được để trống'),
   avatar: yup.string().url('Không đúng định dạng url'),
 
 })
+let fakeData = async () => {
+  for (let i = 0; i < 200; i++) {
+    await axios.post(`${URL_API.baseApiUrl}contact`, {
+      name: faker.person.fullName(),
+      birthday: dayjs(faker.date.birthdate()).format('YYYY-MM-DD'),
+      company_name: faker.company.name(),
+      department: faker.commerce.department(),
+      job_title: faker.company.buzzNoun(),
+      phone: faker.phone.imei(),
+      avatar: faker.image.avatar(),
+      note: faker.lorem.paragraph()
+    });
+    console.log(i);
+  }
+}
 export default function CreateContact() {
+  let navigate = useNavigate();
   const { register, watch, handleSubmit, formState: { errors }, reset } = useForm({
-    mode: 'all',
+    mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
@@ -29,21 +51,27 @@ export default function CreateContact() {
     }
   });
   const watchAvatar = watch('avatar', avatarDefault);
-  const handleSubmitForm = (values) => {
-    console.log(values);
-    toast.success("Create success!", {
-      position: "top-center",
-    });
-    reset();
+  const handleSubmitForm = async (values) => {
+    let response = await axios.post(`${URL_API.baseApiUrl}contact`, values);
+    if (response.status == 201) {
+      toast.success("Create success!", {
+        position: "top-center",
+      });
+      reset();
+      return navigate('/admin/contact/list');
+    }
   }
-  return (
 
+  useEffect(() => {
+    document.title = "Create Contact";
+  }, []);
+  return (
     <div className="row">
       <div className="p-5">
         <div className="text-center">
           <h1 className="h4 text-gray-900 mb-4">Create an Contact!</h1>
         </div>
-        <form className="user">
+        <form className="user" onSubmit={handleSubmit(handleSubmitForm)}>
           <div className="form-group row">
             <div className="col-6 mb-3">
               <label className="form-label">Full name</label>
@@ -116,7 +144,7 @@ export default function CreateContact() {
               <div className="invalid-feedback">
                 {errors.avatar?.message}
               </div>
-              <img src={watchAvatar} className='img-thumbnai border border-1 my-2' alt="Avatar" />
+              <img src={watchAvatar} className='img-thumbnai border border-1 mw-100 my-2' alt="Avatar" />
             </div>
             <div className="col-6 mb-3">
               <label className="form-label">Note</label>
@@ -130,9 +158,12 @@ export default function CreateContact() {
             </div>
           </div>
 
-          <a className="btn btn-primary">
+          <Link to={'/admin/contact/list'} className="btn btn-danger me-2">
+            Close
+          </Link>
+          <button className="btn btn-primary">
             Create
-          </a>
+          </button>
         </form>
 
       </div>

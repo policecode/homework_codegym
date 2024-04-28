@@ -6,11 +6,11 @@ import { FaChevronLeft, FaRegChartBar, FaRegLaughSquint } from "react-icons/fa";
 import { IoMdContacts } from "react-icons/io";
 import { LuWrench } from "react-icons/lu";
 import { Link, NavLink, useLocation } from "react-router-dom";
-
+import LocalStorageHelper from "../utils/LocalStorageHelper";
 export default function SideBar() {
   // let location = useLocation();
   // console.log(location);
-  let [show, setShow] = useState('');
+  let [show, setShow] = useState(() => LocalStorageHelper.getStorage('showSidebar'));
   let [sidebar, setSidebar] = useState(false);
   // useEffect(() => {
   //   setShow(location.pathname);
@@ -18,8 +18,10 @@ export default function SideBar() {
   let handleShowItem = (e, name) => {
     if (show == name) {
       setShow('');
+      LocalStorageHelper.setStorage('showSidebar', '');
     } else {
       setShow(name);
+      LocalStorageHelper.setStorage('showSidebar', name);
     }
   }
   return (

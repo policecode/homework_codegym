@@ -1,12 +1,9 @@
 * {
     font-size: 16px;
 }
-.fvn-image {
-    height: 200px;
-    /* drop hình ảnh cho đều */
-    object-fit: cover;
+.mw-100 {
+    max-width: 100%;
 }
-.bg-top-one {
-    background-color: #303030;
-    color: #eeeeee;
+.cursor-pointer {
+    cursor: pointer;
 }

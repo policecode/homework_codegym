@@ -1,190 +1,189 @@
-import { FaPlus } from "react-icons/fa";
+import { useEffect, useState } from "react";
+import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
-
+import { URL_API } from '../../utils/const';
+import Swal from "sweetalert2";
+import axios from "axios";
+import Loading from "../Loading";
+import Paging from "../Paging";
+import { MdAutoFixNormal } from "react-icons/md";
+import UpdateContact from "./UpdateContact";
+// https://github.com/typicode/json-server/tree/v0
 export default function ContactList() {
+  let [loading, setLoading] = useState(false);
+  let [items, setItems] = useState([]);
+  let [itemDetail, setItemDetail] = useState({});
+  let [limit, setLimit] = useState(20);
+  let [page, setPage] = useState(1);
+  let [sort, setSort] = useState('id');
+  let [order, setOrder] = useState('desc');
+  let [total, setTotal] = useState(0);
 
+  useEffect(() => {
+    getData('count');
+    document.title = "List Contact";
+  }, []);
+  useEffect(() => {
+    getData();
+  }, [limit, page, sort, order]);
+
+  let getData = async (action = 'list') => {
+    // name_like=đạt
+    let api = `${URL_API.baseApiUrl}contact`;
+    if (action == 'list') {
+      setLoading(true);
+      let response = await axios.get(`${api}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`);
+      if (response.status == 200) {
+        setItems(response.data);
+      } else {
+        setItems([]);
+      }
+      setLoading(false);
+    }
+    if (action == 'count') {
+      let response = await axios.get(api);
+      if (response.status == 200) {
+        setTotal(response.data.length);
+      }
+    }
+  }
+
+  let changeLimit = (e) => {
+    setLimit(e.target.value);
+    setPage(1);
+  }
+
+  let destroyItem = async (item) => {
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: "btn btn-success",
+        cancelButton: "btn btn-danger",
+      },
+      buttonsStyling: false,
+    });
+    let result = await swalWithBootstrapButtons.fire({
+      title: "Are you sure?",
+      text: `Do you want to delete ${item.name}?`,
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, delete it!",
+      cancelButtonText: "No, cancel!",
+      reverseButtons: true,
+    });
+    if (result.isConfirmed) {
+      let response = await axios.delete(`${URL_API.baseApiUrl}contact/${item.id}`);
+      if (response.status == 200) {
+        swalWithBootstrapButtons.fire({
+          title: "Deleted!",
+          text: `"${item.name}" has been deleted.`,
+          icon: "success",
+        });
+        getData();
+        getData('count');
+      }
+    } else if (result.dismiss === Swal.DismissReason.cancel) {
+      swalWithBootstrapButtons.fire({
+        title: "Cancelled",
+        text: `"${item.name}" is safe :)`,
+        icon: "error",
+      });
+    }
+  }
   return (
-    <div class="container-fluid">
-
+    <div className="container-fluid">
+      {loading?<Loading />:''}
       <Link to={'/admin/contact/create'} className="btn btn-primary btn-icon-split my-4"><FaPlus className="me-2" />Create</Link>
-      <div class="card shadow mb-4">
-        <div class="card-header py-3">
-          <h6 class="m-0 font-weight-bold text-primary">Contact list</h6>
+      <div className="card shadow mb-4">
+        <div className="card-header py-3">
+          <h6 className="m-0 font-weight-bold text-primary">Contact list</h6>
         </div>
-        <div class="card-body">
-          <div class="table-responsive">
-            <div class="row">
-              <div class="col-sm-12 col-md-6">
-                <div class="dataTables_length" id="dataTable_length">
-                  <label>Show
-                    <select name="dataTable_length" class="custom-select custom-select-sm form-control form-control-sm">
+        <div className="card-body">
+          <div className="table-responsive">
+            <div className="row">
+              <div className="col-sm-12 col-md-6">
+                <div className="dataTables_length">
+                  <label className="d-inline-flex align-items-center">Show
+                    <select 
+                      defaultValue={limit} 
+                      style={{paddingRight: '1.5rem'}}
+                      onChange={(e) => changeLimit(e)}
+                      className="custom-select form-control mx-2">
                       <option value="10">10</option>
-                      <option value="25">25</option>
+                      <option value="20">20</option>
+                      <option value="30">30</option>
+                      <option value="40">40</option>
                       <option value="50">50</option>
-                      <option value="100">100</option>
                     </select> entries
                   </label>
                 </div>
               </div>
-              <div class="col-sm-12 col-md-6">
-                <div id="dataTable_filter" class="dataTables_filter">
-                  <label>Search:
-                    <input type="search" class="form-control form-control-sm" placeholder="" />
+              <div className="col-sm-12 col-md-6">
+                <div id="dataTable_filter" className="dataTables_filter d-flex justify-content-end">
+                  <label className="d-inline-flex align-items-center">Search:
+                    <input type="search" className="form-control ml-2" placeholder="" />
                   </label>
                 </div>
               </div>
             </div>
-            <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+            <table className="table table-bordered" id="dataTable" width="100%">
               <thead>
                 <tr>
+                  <th>#</th>
+                  <th width="10%">Avatar</th>
                   <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
+                  <th>Phone</th>
+                  <th>Birthday</th>
+                  <th>Company</th>
+                  <th width="10%">Action</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
+                  <th>#</th>
+                  <th>Avatar</th>
                   <th>Name</th>
-                  <th>Position</th>
-                  <th>Office</th>
-                  <th>Age</th>
-                  <th>Start date</th>
-                  <th>Salary</th>
+                  <th>Phone</th>
+                  <th>Birthday</th>
+                  <th>Company</th>
+                  <th>Action</th>
                 </tr>
               </tfoot>
               <tbody>
-                <tr>
-                  <td>Tiger Nixon</td>
-                  <td>System Architect</td>
-                  <td>Edinburgh</td>
-                  <td>61</td>
-                  <td>2011/04/25</td>
-                  <td>$320,800</td>
-                </tr>
-                <tr>
-                  <td>Garrett Winters</td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>63</td>
-                  <td>2011/07/25</td>
-                  <td>$170,750</td>
-                </tr>
-                <tr>
-                  <td>Ashton Cox</td>
-                  <td>Junior Technical Author</td>
-                  <td>San Francisco</td>
-                  <td>66</td>
-                  <td>2009/01/12</td>
-                  <td>$86,000</td>
-                </tr>
-                <tr>
-                  <td>Cedric Kelly</td>
-                  <td>Senior Javascript Developer</td>
-                  <td>Edinburgh</td>
-                  <td>22</td>
-                  <td>2012/03/29</td>
-                  <td>$433,060</td>
-                </tr>
-                <tr>
-                  <td>Airi Satou</td>
-                  <td>Accountant</td>
-                  <td>Tokyo</td>
-                  <td>33</td>
-                  <td>2008/11/28</td>
-                  <td>$162,700</td>
-                </tr>
-                <tr>
-                  <td>Brielle Williamson</td>
-                  <td>Integration Specialist</td>
-                  <td>New York</td>
-                  <td>61</td>
-                  <td>2012/12/02</td>
-                  <td>$372,000</td>
-                </tr>
-                <tr>
-                  <td>Herrod Chandler</td>
-                  <td>Sales Assistant</td>
-                  <td>San Francisco</td>
-                  <td>59</td>
-                  <td>2012/08/06</td>
-                  <td>$137,500</td>
-                </tr>
-                <tr>
-                  <td>Rhona Davidson</td>
-                  <td>Integration Specialist</td>
-                  <td>Tokyo</td>
-                  <td>55</td>
-                  <td>2010/10/14</td>
-                  <td>$327,900</td>
-                </tr>
-                <tr>
-                  <td>Colleen Hurst</td>
-                  <td>Javascript Developer</td>
-                  <td>San Francisco</td>
-                  <td>39</td>
-                  <td>2009/09/15</td>
-                  <td>$205,500</td>
-                </tr>
-                <tr>
-                  <td>Sonya Frost</td>
-                  <td>Software Engineer</td>
-                  <td>Edinburgh</td>
-                  <td>23</td>
-                  <td>2008/12/13</td>
-                  <td>$103,600</td>
-                </tr>
-                <tr>
-                  <td>Jena Gaines</td>
-                  <td>Office Manager</td>
-                  <td>London</td>
-                  <td>30</td>
-                  <td>2008/12/19</td>
-                  <td>$90,560</td>
-                </tr>
+                {items.map((item, index) =>(
+                  // eslint-disable-next-line react/jsx-key
+                  <tr key={item.id}>
+                    <td>{index+1}</td>
+                    <td>
+                      <img src={item.avatar} className="rounded-circle w-100" loading="lazy" alt="" />
+                    </td>
+                    <td>{item.name}</td>
+                    <td>{item.phone}</td>
+                    <td>{item.birthday}</td>
+                    <td>{item.company_name}</td>
+                    <td>
+                      <button 
+                        onClick={() => setItemDetail(item)}
+                        className="btn btn-warning d-flex align-items-center m-2">
+                        <MdAutoFixNormal className="me-2" />
+                        Update
+                      </button>
+                      <button 
+                        onClick={() => destroyItem(item)}
+                        className="btn btn-danger d-flex align-items-center m-2">
+                        <FaRegTrashAlt className="me-2" />
+                        Delete
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+         
               </tbody>
             </table>
-            <div class="row">
-              <div class="col-sm-12 col-md-5">
-                <div class="dataTables_info" id="dataTable_info" >Showing 1 to 10 of 57 entries</div>
-              </div>
-              <div class="col-sm-12 col-md-7">
-                <div class="dataTables_paginate paging_simple_numbers" id="dataTable_paginate">
-                  <ul class="pagination">
-                    <li class="paginate_button page-item previous disabled" id="dataTable_previous">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="0" tabindex="0" class="page-link">Previous</a>
-                    </li>
-                    <li class="paginate_button page-item active">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="1" tabindex="0" class="page-link">1</a>
-                    </li>
-                    <li class="paginate_button page-item ">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="2" tabindex="0" class="page-link">2</a>
-                    </li>
-                    <li class="paginate_button page-item ">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="3" tabindex="0" class="page-link">3</a>
-                    </li>
-                    <li class="paginate_button page-item ">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="4" tabindex="0" class="page-link">4</a>
-                    </li>
-                    <li class="paginate_button page-item ">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="5" tabindex="0" class="page-link">5</a>
-                    </li>
-                    <li class="paginate_button page-item ">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="6" tabindex="0" class="page-link">6</a>
-                    </li>
-                    <li class="paginate_button page-item next" id="dataTable_next">
-                      <a href="#" aria-controls="dataTable" data-dt-idx="7" tabindex="0" class="page-link">Next</a>
-                    </li>
-                  </ul>
-                </div>
-              </div>
-            </div>
+            <Paging changePage={setPage} total={total} page={page} limit={limit}/>
           </div>
         </div>
       </div>
-
+      {itemDetail?.id ? <UpdateContact item={itemDetail} setItem={setItemDetail} resetData={getData} />:''}
     </div>
   )
 }
