@@ -22,8 +22,8 @@ export const PAGING = {
 }
 
 export const URL_API = {
-  // baseApiUrl: `${process.env.baseAPIUrl}`,
-  baseApiUrl: `http://localhost:3000/`
+  baseApiUrl: `https://hoangdat-json-server.vercel.app/`,
+  // baseApiUrl: `http://localhost:3000/`
 }
 
 
