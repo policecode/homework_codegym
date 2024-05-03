@@ -4,12 +4,12 @@ import { Link } from "react-router-dom";
 import { URL_API } from "../../utils/const";
 import Swal from "sweetalert2";
 import axios from "axios";
-import Loading from "../Loading";
-import Paging from "../Paging";
+import Loading from "../template/Loading";
+import Paging from "../template/Paging";
 import { MdAutoFixNormal } from "react-icons/md";
 import UpdateContact from "./UpdateContact";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
-import SortIcon from "../SortIcon";
+import SortIcon from "../template/SortIcon";
 // https://github.com/typicode/json-server/tree/v0
 export default function ContactList() {
   let [loading, setLoading] = useState(false);
@@ -45,7 +45,7 @@ export default function ContactList() {
       setLoading(false);
     }
     if (action == "count") {
-      let response = await axios.get(api);
+      let response = await axios.get(`${api}/`);
       if (response.status == 200) {
         setTotal(response.data.length);
       }

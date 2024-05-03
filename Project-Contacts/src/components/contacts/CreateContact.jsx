@@ -19,29 +19,32 @@ const schema = yup.object({
   avatar: yup.string().url('Không đúng định dạng url'),
 
 })
-let fakeData = async () => {
-  for (let i = 0; i < 200; i++) {
-    await axios.post(`${URL_API.baseApiUrl}contact`, {
-      name: faker.person.fullName(),
-      birthday: dayjs(faker.date.birthdate()).format('YYYY-MM-DD'),
-      company_name: faker.company.name(),
-      department: faker.commerce.department(),
-      job_title: faker.company.buzzNoun(),
-      phone: faker.phone.imei(),
-      avatar: faker.image.avatar(),
-      note: faker.lorem.paragraph()
-    });
-    console.log(i);
-  }
-}
+// let fakeData = async () => {
+//   for (let i = 0; i < 200; i++) {
+//     await axios.post(`${URL_API.baseApiUrl}contact`, {
+//       name: faker.person.fullName(),
+//       birthday: dayjs(faker.date.birthdate()).format('YYYY-MM-DD'),
+//       company_name: faker.company.name(),
+//       department: faker.commerce.department(),
+//       job_title: faker.company.buzzNoun(),
+//       phone: faker.phone.imei(),
+//       avatar: faker.image.avatar(),
+//       note: faker.lorem.paragraph()
+//     });
+//     console.log(i);
+//   }
+// }
 export default function CreateContact() {
+  useEffect(() => {
+    document.title = "Create Contact";
+  }, []);
   let navigate = useNavigate();
   const { register, watch, handleSubmit, formState: { errors }, reset } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
       name: '',
-      birthday: 0,
+      birthday: "",
       company_name: "",
       department: '',
       job_title: '',
@@ -62,9 +65,7 @@ export default function CreateContact() {
     }
   }
 
-  useEffect(() => {
-    document.title = "Create Contact";
-  }, []);
+
   return (
     <div className="row">
       <div className="p-5">

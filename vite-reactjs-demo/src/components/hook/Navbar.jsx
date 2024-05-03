@@ -1,10 +1,13 @@
+import {  useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
+import { ThemeContext } from "../../context/ThemeContext";
 /**
  * Link: Thay cho thể a thông thường
  * NavLink: Tự động thêm class active khi đúng router
  */
-export default function Navbar(props) {
 
+export default function Navbar(props) {
+  const {theme, changeTheme} = useContext(ThemeContext);
   return (
     <>
      <nav className="navbar navbar-expand-lg bg-body-tertiary">
@@ -26,6 +29,9 @@ export default function Navbar(props) {
               </li>
               <li className="nav-item">
                 <NavLink to={'/students'} className="nav-link" aria-current="page" >Students</NavLink>
+              </li>
+              <li className="nav-item">
+                <div onClick={changeTheme} className="btn btn-small btn-dark">Change Thene ({theme})</div>
               </li>
               <li className="nav-item dropdown">
                 <a className="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

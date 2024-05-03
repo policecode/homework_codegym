@@ -4,9 +4,9 @@ import "react-toastify/dist/ReactToastify.css";
 import "../assets/css/all.min.css";
 import "../assets/css/custom-font.css";
 import "../assets/css/sb-admin-2.min.css";
-import SideBar from "../components/SideBar";
-import Topbar from "../components/Topbar";
-import Footer from "../components/Footer";
+import SideBar from "../components/template/SideBar";
+import Topbar from "../components/template/Topbar";
+import Footer from "../components/template/Footer";
 export default function AdminPage() {
   return (
     <div id="wrapper">

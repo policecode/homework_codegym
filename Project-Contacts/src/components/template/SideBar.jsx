@@ -6,7 +6,7 @@ import { FaChevronLeft, FaRegChartBar, FaRegLaughSquint } from "react-icons/fa";
 import { IoMdContacts } from "react-icons/io";
 import { LuWrench } from "react-icons/lu";
 import { Link, NavLink, useLocation } from "react-router-dom";
-import LocalStorageHelper from "../utils/LocalStorageHelper";
+import LocalStorageHelper from "../../utils/LocalStorageHelper";
 export default function SideBar() {
   // let location = useLocation();
   // console.log(location);
@@ -67,7 +67,7 @@ export default function SideBar() {
             </div>
           </div>
         </li>
-
+{/* 
         <li className="nav-item">
           <a className="nav-link collapsed" href="#">
             <LuWrench/>
@@ -147,7 +147,7 @@ export default function SideBar() {
             <CiViewTable/>
             <span className="mx-2">Tables</span>
           </a>
-        </li>
+        </li> */}
 
         <hr className="sidebar-divider d-none d-md-block" />
 

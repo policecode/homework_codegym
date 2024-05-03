@@ -1,4 +1,4 @@
-import "../assets/css/loading.css";
+import "../../assets/css/loading.css";
 export default function Loading() {
   return (
     <div className="main__loading">

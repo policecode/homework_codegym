@@ -2,7 +2,7 @@ import { BsFillBellFill } from "react-icons/bs";
 import { IoIosSearch } from "react-icons/io";
 import { MdEmail } from "react-icons/md";
 
-import avatarDefault from "../assets/image/undraw_profile.svg";
+import avatarDefault from "../../assets/image/undraw_profile.svg";
 export default function Topbar() {
   return (
     <nav className="navbar navbar-expand navbar-light bg-white topbar mb-4 static-top shadow">

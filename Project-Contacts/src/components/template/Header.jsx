@@ -1,4 +1,5 @@
 import { FaRegBell } from 'react-icons/fa'
+import { Link } from 'react-router-dom'
 
 
 export default function Header() {
@@ -6,7 +7,7 @@ export default function Header() {
     <>
       <nav className='bg-success'>
         <div className='container d-flex align-items-center justify-content-between text-white py-2'>
-          <h5 className='flex-grow-1 text-center'>Contact</h5>
+            <Link to={'/admin'} className='btn btn-light text-center'>Admin</Link>
           <div className='d-flex align-items-center'>
             <FaRegBell className='me-2' />
             <h6 className='me-2'>Hoàng Đạt</h6>
