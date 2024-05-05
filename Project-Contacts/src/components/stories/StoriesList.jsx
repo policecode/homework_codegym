@@ -1,4 +1,4 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { URL_API } from "../../utils/const";
@@ -11,7 +11,7 @@ import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
 import SortIcon from "../template/SortIcon";
 import { GlobalContext } from "../../context/GlobalContext";
 // https://github.com/typicode/json-server/tree/v0
-export default function ContactList() {
+export default function StoriesList() {
   const { setLoading } = useContext(GlobalContext);
   let [items, setItems] = useState([]);
   let [itemDetail, setItemDetail] = useState({});
@@ -20,22 +20,30 @@ export default function ContactList() {
   let [sort, setSort] = useState("id");
   let [order, setOrder] = useState("desc");
   let [total, setTotal] = useState(0);
-
+  let [search, setSearch] = useState('');
+  const actionSearch = useRef(undefined);
   useEffect(() => {
     getData("count");
     document.title = "List Contact";
-  }, []);
+  }, [search]);
   useEffect(() => {
     getData();
-  }, [limit, page, sort, order]);
+  }, [limit, page, sort, order, search]);
+
+  let handleSearch = (e) => {
+    clearTimeout(actionSearch.current);
+    actionSearch.current = setTimeout(() => {
+      setSearch(e.target.value);
+    }, 1000);
+  }
 
   let getData = async (action = "list") => {
     // name_like=đạt
-    let api = `${URL_API.baseApiUrl}contact`;
+    let api = `${URL_API.baseApiUrl}stories`;
     if (action == "list") {
       setLoading(true);
       let response = await axios.get(
-        `${api}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}`
+        `${api}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}&title_like=${search}`
       );
       if (response.status == 200) {
         setItems(response.data);
@@ -45,7 +53,7 @@ export default function ContactList() {
       setLoading(false);
     }
     if (action == "count") {
-      let response = await axios.get(`${api}/`);
+      let response = await axios.get(`${api}/?title_like=${search}`);
       if (response.status == 200) {
         setTotal(response.data.length);
       }
@@ -107,15 +115,15 @@ export default function ContactList() {
   return (
     <div className="container-fluid">
       <Link
-        to={"/admin/contact/create"}
+        to={"/admin/stories/create"}
         className="btn btn-primary btn-icon-split my-4"
       >
         <FaPlus className="me-2" />
         Create
       </Link>
       <div className="card shadow mb-4">
-        <div className="card-header py-3">
-          <h6 className="m-0 font-weight-bold text-primary">Contact list</h6>
+        <div id="table_head_top" className="card-header py-3">
+          <h6 className="m-0 font-weight-bold text-primary">Stories list</h6>
         </div>
         <div className="card-body">
           <div className="table-responsive">
@@ -148,6 +156,7 @@ export default function ContactList() {
                   <label className="d-inline-flex align-items-center">
                     Search:
                     <input
+                      onInput={handleSearch}
                       type="search"
                       className="form-control ml-2"
                       placeholder=""
@@ -160,54 +169,54 @@ export default function ContactList() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th width="10%">Avatar</th>
+                  <th width="10%">Thumbnail</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
-                      label="Name"
-                      field="name"
+                      label="Tên truyện"
+                      field="title"
                       sort={sort}
                       order={order}
                     />
                   </th>
-                  <th>Phone</th>
+                  <th>Tác giả</th>
+                  <th>Trạng thái</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
-                      label="Birthday"
-                      field="birthday"
+                      label="Cập nhật"
+                      field="updated_at"
                       sort={sort}
                       order={order}
                     />
                   </th>
-                  <th>Company</th>
                   <th width="10%">Action</th>
                 </tr>
               </thead>
               <tfoot>
                 <tr>
                   <th>#</th>
-                  <th>Avatar</th>
+                  <th width="10%">Thumbnail</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
-                      label="Name"
-                      field="name"
+                      label="Tên truyện"
+                      field="title"
                       sort={sort}
                       order={order}
                     />
                   </th>
-                  <th>Phone</th>
+                  <th>Tác giả</th>
+                  <th>Trạng thái</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
-                      label="Birthday"
-                      field="birthday"
+                      label="Cập nhật"
+                      field="updated_at"
                       sort={sort}
                       order={order}
                     />
                   </th>
-                  <th>Company</th>
                   <th>Action</th>
                 </tr>
               </tfoot>
@@ -218,16 +227,16 @@ export default function ContactList() {
                     <td>{index + 1}</td>
                     <td>
                       <img
-                        src={item.avatar}
-                        className="rounded-circle w-100"
+                        src={item.thumbnail}
+                        className="w-100"
                         loading="lazy"
                         alt=""
                       />
                     </td>
-                    <td>{item.name}</td>
-                    <td>{item.phone}</td>
-                    <td>{item.birthday}</td>
-                    <td>{item.company_name}</td>
+                    <td>{item.title}</td>
+                    <td>{item.author}</td>
+                    <td>{item.status}</td>
+                    <td>{item.updated_at}</td>
                     <td>
                       <button
                         onClick={() => setItemDetail(item)}

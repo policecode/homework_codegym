@@ -7,6 +7,7 @@ import { IoMdContacts } from "react-icons/io";
 import { LuWrench } from "react-icons/lu";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import LocalStorageHelper from "../../utils/LocalStorageHelper";
+import { IoBookOutline } from "react-icons/io5";
 export default function SideBar() {
   // let location = useLocation();
   // console.log(location);
@@ -67,37 +68,22 @@ export default function SideBar() {
             </div>
           </div>
         </li>
-{/* 
+
         <li className="nav-item">
-          <a className="nav-link collapsed" href="#">
-            <LuWrench/>
-            <span className="mx-2">Utilities</span>
-          </a>
-          <div
-            id="collapseUtilities"
-            className="collapse"
-            aria-labelledby="headingUtilities"
-            data-parent="#accordionSidebar"
-          >
-            <div className="bg-white py-2 collapse-inner rounded">
-              <h6 className="collapse-header">Custom Utilities:</h6>
-              <a className="collapse-item" href="utilities-color.html">
-                Colors
-              </a>
-              <a className="collapse-item" href="utilities-border.html">
-                Borders
-              </a>
-              <a className="collapse-item" href="utilities-animation.html">
-                Animations
-              </a>
-              <a className="collapse-item" href="utilities-other.html">
-                Other
-              </a>
+          <Link onClick={(e) => handleShowItem(e, 'story')} className={`nav-link collapsed ${show == 'story'?'text-white':''}`}>
+            <IoBookOutline />
+            <span className="mx-2">Stories</span>
+          </Link>
+          <div id="collapseTwo" className={`collapse ${show == 'story'?'show':''}`}>
+            <div className="bg-white py-2 collapse-inner rounded animated--grow-in">
+              <h6 className="collapse-header">Stories:</h6>
+              <NavLink to={"/admin/stories/list"} className="collapse-item">List Story</NavLink>
+              <NavLink to={"/admin/stories/create"} className="collapse-item">Create Story</NavLink>
             </div>
           </div>
         </li>
 
-        <hr className="sidebar-divider" />
+        {/* <hr className="sidebar-divider" />
 
         <div className="sidebar-heading">Addons</div>
 
