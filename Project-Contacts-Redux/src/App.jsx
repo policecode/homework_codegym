@@ -11,14 +11,13 @@ import ContactPage from './pages/ContactPage';
 import { Route, Routes } from 'react-router-dom';
 import Profile from './pages/Profile';
 import Loading from './components/template/Loading';
-import { useContext } from 'react';
-import { GlobalContext } from './context/GlobalContext';
 import { ToastContainer } from "react-toastify";
 import StoriesList from './components/stories/StoriesList';
 import CreateStories from './components/stories/CreateStories';
+import { useSelector } from 'react-redux';
 
 function App() {
-  const { loading } = useContext(GlobalContext);
+  const loading = useSelector(state => state.loading);
   return (
     <>
       {loading ? <Loading /> : ""}

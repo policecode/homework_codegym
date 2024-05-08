@@ -1,12 +1,15 @@
 import {  useContext, useState } from "react";
 import { Link, NavLink } from "react-router-dom";
 import { ThemeContext } from "../../context/ThemeContext";
+import { useSelector } from "react-redux";
 /**
  * Link: Thay cho thể a thông thường
  * NavLink: Tự động thêm class active khi đúng router
  */
 
 export default function Navbar(props) {
+  const store = useSelector((state) => state);
+  // console.log(store);
   const {theme, changeTheme} = useContext(ThemeContext);
   return (
     <>

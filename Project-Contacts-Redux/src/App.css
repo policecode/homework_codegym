@@ -1,0 +1,9 @@
+* {
+    font-size: 16px;
+}
+.mw-100 {
+    max-width: 100%;
+}
+.cursor-pointer {
+    cursor: pointer;
+}
