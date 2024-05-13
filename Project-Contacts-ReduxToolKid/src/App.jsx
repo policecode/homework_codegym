@@ -15,9 +15,10 @@ import { ToastContainer } from "react-toastify";
 import StoriesList from './components/stories/StoriesList';
 import CreateStories from './components/stories/CreateStories';
 import { useSelector } from 'react-redux';
+import { loadingSelector } from './store/selectors';
 
 function App() {
-  const loading = useSelector(state => state.loading);
+  const loading = useSelector(loadingSelector);
   return (
     <>
       {loading ? <Loading /> : ""}

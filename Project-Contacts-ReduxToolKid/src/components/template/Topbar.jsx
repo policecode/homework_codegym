@@ -9,10 +9,11 @@ import { CiCircleList } from "react-icons/ci";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import authSlice from "../../redux-tolkit/authSlice";
+import { authSelector } from "../../store/selectors";
 export default function Topbar() {
   const dispatch = useDispatch();
   let navigate = useNavigate();
-  const auth = useSelector(state => state.auth);
+  const auth = useSelector(authSelector);
   const [show, setShow] = useState("");
   let handleShowItem = (e, name) => {
     if (show == name) {
