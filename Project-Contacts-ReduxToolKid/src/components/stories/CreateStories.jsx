@@ -2,56 +2,72 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { URL_API } from '../../utils/const';
-import avatarDefault from '../../assets/image/guest-user.webp';
+import thumbnailDefault from '../../assets/image/default-book.png';
 import axios from 'axios';
-// import { faker } from '@faker-js/faker';
-// import dayjs from 'dayjs';
+
 import { toast } from 'react-toastify';
 import { Link, useNavigate } from 'react-router-dom';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import loadingSlice from '../../redux-tolkit/loadingSlice';
+import Select from 'react-select';
+import makeAnimated from 'react-select/animated';
+import { optionCategory } from '../../utils/const';
+import JsCoreHelper from '../../utils/JsCoreHelper';
+import dayjs from 'dayjs';
+
 const schema = yup.object({
-  name: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
-  birthday: yup.string().required('Không được để trống'),
-  company_name: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
-  department: yup.string().required('Không được để trống'),
-  job_title: yup.string().required('Không được để trống'),
-  phone: yup.string().required('Không được để trống'),
-  avatar: yup.string().url('Không đúng định dạng url'),
+  title: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
+  description: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
+  slug: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
+  author: yup.string().required('Không được để trống'),
+  category: '',
+  status: yup.string().required('Không được để trống'),
+  thumbnail: yup.string().url('Không đúng định dạng url'),
 
 })
+const animatedComponents = makeAnimated();
+const convertSelectToString = (selectMuti) => {
+  let str = '';
+  selectMuti.forEach(selectObj => {
+    str += `${selectObj.value}, `
+  });
+  return str;
+}
 export default function CreateStories() {
   useEffect(() => {
-    document.title = "Create Contact";
+    document.title = "Create Stories";
   }, []);
+  const [selectCat, setSelectCat] = useState(); 
   const dispatch = useDispatch();
   let navigate = useNavigate();
-  const { register, watch, handleSubmit, formState: { errors }, reset } = useForm({
+  const { register, watch, handleSubmit, setValue, formState: { errors }, reset } = useForm({
     mode: 'onBlur',
     resolver: yupResolver(schema),
     defaultValues: {
-      name: '',
-      birthday: "",
-      company_name: "",
-      department: '',
-      job_title: '',
-      phone: '',
-      avatar: '',
-      note: ''
+      title: '',
+      description: "",
+      slug: "",
+      author: '',
+      category: '',
+      thumbnail: '',
+      status: '',
     }
   });
-  const watchAvatar = watch('avatar', avatarDefault);
+  const watchThumbnail = watch('thumbnail', thumbnailDefault);
   const handleSubmitForm = async (values) => {
+    values.category = convertSelectToString(selectCat);
+    values.created_at = dayjs().format('YYYY-MM-DD HH:mm:ss');
+    values.updated_at = dayjs().format('YYYY-MM-DD HH:mm:ss');
     dispatch(loadingSlice.actions.loadingShow());
-    let response = await axios.post(`${URL_API.baseApiUrl}contact`, values);
+    let response = await axios.post(`${URL_API.baseApiUrl}stories`, values);
     if (response.status == 201) {
       toast.success("Create success!", {
         position: "top-center",
       });
       reset();
       dispatch(loadingSlice.actions.loadingHidden());
-      return navigate('/admin/contact/list');
+      return navigate('/admin/stories/list');
     }
   }
 
@@ -65,91 +81,85 @@ export default function CreateStories() {
         <form className="user" onSubmit={handleSubmit(handleSubmitForm)}>
           <div className="form-group row">
             <div className="col-6 mb-3">
-              <label className="form-label">Full name</label>
+              <label className="form-label">Tên truyện</label>
               <input
-                {...register('name')}
-                className={`form-control ${errors.name?.message ? 'is-invalid' : ''}`}
-                type="text" placeholder="Full name" />
+                {...register('title')}
+                onChange={(e) => setValue('slug', JsCoreHelper.convertToSlug(e.target.value))}
+                className={`form-control ${errors.title?.message ? 'is-invalid' : ''}`}
+                type="text" placeholder="Tên truyện" />
 
               <div className="invalid-feedback">
-                {errors.name?.message}
+                {errors.title?.message}
               </div>
             </div>
-            <div className="col-6 mb-3">
-              <label className="form-label">Birthday</label>
-              <input
-                {...register('birthday')}
-                className={`form-control ${errors.birthday?.message ? 'is-invalid' : ''}`}
-                type="date" />
-              <div className="invalid-feedback">
-                {errors.birthday?.message}
-              </div>
-            </div>
-            <div className="col-6 mb-3">
-              <label className="form-label">Company name</label>
-              <input
-                {...register('company_name')}
-                className={`form-control ${errors.company_name?.message ? 'is-invalid' : ''}`}
-                type="text" placeholder="Company name" />
-              <div className="invalid-feedback">
-                {errors.company_name?.message}
-              </div>
-            </div>
-            <div className="col-6 mb-3">
-              <label className="form-label">Department</label>
-              <input
-                {...register('department')}
-                className={`form-control ${errors.department?.message ? 'is-invalid' : ''}`}
-                type="text" placeholder="Department" />
-              <div className="invalid-feedback">
-                {errors.department?.message}
-              </div>
-            </div>
-            <div className="col-6 mb-3">
-              <label className="form-label">Job title</label>
-              <input
-                {...register('job_title')}
-                className={`form-control ${errors.job_title?.message ? 'is-invalid' : ''}`}
-                type="text" placeholder="Job title" />
-              <div className="invalid-feedback">
-                {errors.job_title?.message}
-              </div>
 
-            </div>
             <div className="col-6 mb-3">
-              <label className="form-label">Phone</label>
+              <label className="form-label">Slug</label>
               <input
-                {...register('phone')}
-                className={`form-control ${errors.phone?.message ? 'is-invalid' : ''}`}
-                type="tel" placeholder="Phone number" />
+                {...register('slug')}
+                disabled
+                className={`form-control ${errors.slug?.message ? 'is-invalid' : ''}`}
+                type="text" placeholder="Slug..." />
               <div className="invalid-feedback">
-                {errors.phone?.message}
+                {errors.slug?.message}
               </div>
             </div>
             <div className="col-6 mb-3">
-              <label className="form-label">Avatar</label>
+              <label className="form-label">Tác giả</label>
               <input
-                {...register('avatar')}
-                className={`form-control ${errors.avatar?.message ? 'is-invalid' : ''}`}
-                type="url" placeholder="Link avatar" />
+                {...register('author')}
+                className={`form-control ${errors.author?.message ? 'is-invalid' : ''}`}
+                type="text" placeholder="Tác giả..." />
               <div className="invalid-feedback">
-                {errors.avatar?.message}
+                {errors.author?.message}
               </div>
-              <img src={watchAvatar} className='img-thumbnai border border-1 mw-100 my-2' alt="Avatar" />
             </div>
             <div className="col-6 mb-3">
-              <label className="form-label">Note</label>
+              <label className="form-label">Thể loại</label>
+              <Select
+                onChange={(value) => setSelectCat(value)}
+                closeMenuOnSelect={false}
+                components={animatedComponents} 
+                isMulti
+                options={optionCategory} />
+            </div>
+            <div className="col-6 mb-3">
+              <label className="form-label">Trạng Thái</label>
+              <select 
+                {...register('status')}
+                className={`form-select ${errors.status?.message ? 'is-invalid' : ''}`}>
+                <option value="" disabled>--- Trạng Thái ---</option>
+                <option value="Đang ra">Đang ra</option>
+                <option value="Đang ra">Hoàn Thành</option>
+              </select>
+              <div className="invalid-feedback">
+                {errors.status?.message}
+              </div>
+            </div>
+            <div className="col-6 mb-3">
+              <label className="form-label">Ảnh đại diện</label>
+              <input
+                {...register('thumbnail')}
+                className={`form-control ${errors.thumbnail?.message ? 'is-invalid' : ''}`}
+                type="url" placeholder="Link thumbnail" />
+              <div className="invalid-feedback">
+                {errors.thumbnail?.message}
+              </div>
+              <img src={watchThumbnail} className='img-thumbnai border border-1 mw-100 my-2' alt="Avatar" />
+            </div>
+            <div className="col-12 mb-3">
+              <label className="form-label">Giới thiệu về truyện</label>
               <textarea
-                {...register('note')}
-                className={`form-control ${errors.note?.message ? 'is-invalid' : ''}`}
-                cols="30" rows="10" placeholder="Note" ></textarea>
+                {...register('description')}
+                className={`form-control ${errors.description?.message ? 'is-invalid' : ''}`}
+                cols="30" rows="10" placeholder="Giới thiệu về truyện" ></textarea>
               <div className="invalid-feedback">
-                {errors.note?.message}
+                {errors.description?.message}
               </div>
             </div>
           </div>
 
-          <Link to={'/admin/contact/list'} className="btn btn-danger me-2">
+          <Link to={'/admin/stories/list'} className="btn btn-danger me-2">
             Close
           </Link>
           <button className="btn btn-primary">

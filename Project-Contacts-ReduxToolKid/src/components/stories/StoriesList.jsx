@@ -75,6 +75,12 @@ export default function StoriesList() {
     setPage(1);
   };
 
+  let changePage = (page) => {
+    setPage(page);
+    document.querySelector('#table_head_top').scrollIntoView({ behavior: "smooth", });
+
+  }
+
   let destroyItem = async (item) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -94,7 +100,7 @@ export default function StoriesList() {
     });
     if (result.isConfirmed) {
       let response = await axios.delete(
-        `${URL_API.baseApiUrl}contact/${item.id}`
+        `${URL_API.baseApiUrl}stories/${item.id}`
       );
       if (response.status == 200) {
         swalWithBootstrapButtons.fire({
@@ -259,7 +265,7 @@ export default function StoriesList() {
               </tbody>
             </table>
             <Paging
-              changePage={setPage}
+              changePage={changePage}
               total={total}
               page={page}
               limit={limit}
