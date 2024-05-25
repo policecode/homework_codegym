@@ -1,6 +1,6 @@
 import {  useEffect, useRef, useState } from "react";
 import { FaPlus, FaRegTrashAlt } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import { URL_API } from "../../utils/const";
 import Swal from "sweetalert2";
 import axios from "axios";
@@ -10,22 +10,28 @@ import SortIcon from "../template-admin/SortIcon";
 import { useDispatch } from "react-redux";
 import loadingSlice from "../../redux-tolkit/loadingSlice";
 import { AiOutlineLoading3Quarters } from "react-icons/ai";
-import UpdateStories from "./UpdateStories";
-import { GrChapterAdd } from "react-icons/gr";
+import { IoArrowBackCircleSharp } from "react-icons/io5";
+import EditChaper from "./EditChaper";
 // https://github.com/typicode/json-server/tree/v0
-document.title = "List Contact";
-export default function StoriesList() {
+document.title = "List Chaper";
+export default function ChaperList() {
   const dispatch = useDispatch();
+  let params = useParams();
+  let [story, setStory] = useState({});
+  let [action, setAction] = useState('');
   let [items, setItems] = useState([]);
   let [itemDetail, setItemDetail] = useState({});
   let [limit, setLimit] = useState(20);
   let [page, setPage] = useState(1);
-  let [sort, setSort] = useState("id");
+  let [sort, setSort] = useState("index");
   let [order, setOrder] = useState("desc");
   let [total, setTotal] = useState(0);
   let [search, setSearch] = useState('');
   const actionSearch = useRef(undefined);
   let [loadSearch, setLoadSearch] = useState(false);
+  useEffect(() => {
+    getData("story");
+  }, []);
   useEffect(() => {
     getData("count");
   }, [search]);
@@ -44,11 +50,11 @@ export default function StoriesList() {
 
   let getData = async (action = "list") => {
     // name_like=đạt
-    let api = `${URL_API.baseApiUrl}stories`;
+    let api = `${URL_API.baseApiUrl}chapers`;
     if (action == "list") {
       dispatch(loadingSlice.actions.loadingShow());
       let response = await axios.get(
-        `${api}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}&title_like=${search}`
+        `${api}?_page=${page}&_limit=${limit}&_sort=${sort}&_order=${order}&name_like=${search}&story_id=${params.story_id}`
       );
       if (response.status == 200) {
         setItems(response.data);
@@ -58,9 +64,15 @@ export default function StoriesList() {
       dispatch(loadingSlice.actions.loadingHidden());
     }
     if (action == "count") {
-      let response = await axios.get(`${api}/?title_like=${search}`);
+      let response = await axios.get(`${api}/?name_like=${search}&story_id=${params.story_id}`);
       if (response.status == 200) {
         setTotal(response.data.length);
+      }
+    }
+    if (action == "story") {
+      let response = await axios.get(`${URL_API.baseApiUrl}stories/${params.story_id}`);
+      if (response.status == 200) {
+        setStory(response.data);
       }
     }
   };
@@ -82,8 +94,12 @@ export default function StoriesList() {
   let changePage = (page) => {
     setPage(page);
     document.querySelector('#table_head_top').scrollIntoView({ behavior: "smooth", });
-  }
 
+  }
+  let getFormUpdate = (item) => {
+    setItemDetail(item);
+    setAction('update');
+  }
   let destroyItem = async (item) => {
     const swalWithBootstrapButtons = Swal.mixin({
       customClass: {
@@ -103,7 +119,7 @@ export default function StoriesList() {
     });
     if (result.isConfirmed) {
       let response = await axios.delete(
-        `${URL_API.baseApiUrl}stories/${item.id}`
+        `${URL_API.baseApiUrl}chapers/${item.id}`
       );
       if (response.status == 200) {
         swalWithBootstrapButtons.fire({
@@ -125,18 +141,24 @@ export default function StoriesList() {
   return (
     <div className="container-fluid">
       <div className="d-flex align-items-center">
-        <Link
-          to={"/admin/stories/create"}
+        <button
+          onClick={() => setAction('create')}
           className="btn btn-primary btn-icon-split d-flex align-items-center my-4"
         >
           <FaPlus className="me-2" />
           Create
+        </button>
+        <Link
+          to={"/admin/stories/list"}
+          className="btn btn-danger btn-icon-split d-flex align-items-center my-4 ml-2"
+        >
+          <IoArrowBackCircleSharp className="me-2" />
+          Back
         </Link>
-
       </div>
       <div className="card shadow mb-4">
         <div id="table_head_top" className="card-header py-3">
-          <h6 className="m-0 font-weight-bold text-primary">Stories list</h6>
+          <h6 className="m-0 font-weight-bold text-primary">List Chapers Story: {story?.title}</h6>
         </div>
         <div className="card-body">
           <div className="table-responsive">
@@ -185,18 +207,17 @@ export default function StoriesList() {
               <thead>
                 <tr>
                   <th>#</th>
-                  <th width="10%">Thumbnail</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
-                      label="Tên truyện"
-                      field="title"
+                      label="Vị trí"
+                      field="index"
                       sort={sort}
                       order={order}
                     />
                   </th>
-                  <th>Tác giả</th>
-                  <th>Trạng thái</th>
+                  <th>Tên chương</th>
+                  <th>Slug</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
@@ -211,19 +232,18 @@ export default function StoriesList() {
               </thead>
               <tfoot>
                 <tr>
-                  <th>#</th>
-                  <th width="10%">Thumbnail</th>
+                <th>#</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
-                      label="Tên truyện"
-                      field="title"
+                      label="Vị trí"
+                      field="index"
                       sort={sort}
                       order={order}
                     />
                   </th>
-                  <th>Tác giả</th>
-                  <th>Trạng thái</th>
+                  <th>Tên chương</th>
+                  <th>Slug</th>
                   <th>
                     <SortIcon
                       handleSort={changeSort}
@@ -241,31 +261,13 @@ export default function StoriesList() {
                   // eslint-disable-next-line react/jsx-key
                   <tr key={item.id}>
                     <td>{index + 1}</td>
-                    <td>
-                      <img
-                        src={item.thumbnail}
-                        className="w-100"
-                        loading="lazy"
-                        alt=""
-                      />
-                    </td>
-                    <td>{item.title}</td>
-                    <td>{item.author}</td>
-                    <td>{item.status}</td>
+                    <td>{item.index}</td>
+                    <td>{item.name}</td>
+                    <td>{item.slug}</td>
                     <td>{item.updated_at}</td>
                     <td>
-                      <Link
-                        to={{
-                          pathname: `/admin/chapers/${item.id}/list`
-                        }}
-                        state= {{ collapseItem: 'chaper' }}
-                        className="btn btn-success d-flex align-items-center m-2"
-                      >
-                        <GrChapterAdd className="me-2" />
-                        Chaper
-                      </Link>
                       <button
-                        onClick={() => setItemDetail(item)}
+                        onClick={() => getFormUpdate(item)}
                         className="btn btn-warning d-flex align-items-center m-2"
                       >
                         <MdAutoFixNormal className="me-2" />
@@ -292,11 +294,14 @@ export default function StoriesList() {
           </div>
         </div>
       </div>
-      {itemDetail?.id ? (
-        <UpdateStories
+      {action ? (
+        <EditChaper
           item={itemDetail}
           setItem={setItemDetail}
           resetData={getData}
+          story={story}
+          action={action}
+          setAction={setAction}
         />
       ) : (
         ""

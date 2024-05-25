@@ -1,3 +1,5 @@
+import { optionCategory } from "./const";
+
 const JsCoreHelper = {
   convertToSlug(str) {
     let slug = str.toLowerCase();
@@ -26,6 +28,37 @@ const JsCoreHelper = {
     //In slug ra textbox có id “slug”
 
     return slug;
+  },
+  convertSelectToString (selectMuti) {
+    let str = '';
+    selectMuti.forEach((selectObj, index) => {
+      if ((selectMuti.length - 1) == index) {
+        str += `${selectObj.value}`
+      } else {
+        str += `${selectObj.value}, `
+      }
+    });
+    return str;
+  },
+  convertStringToSelect (selectStr) {
+    let arr = selectStr.split(", ");
+    let catArr = [];
+    for (let i = 0; i < arr.length; i++) {
+      for (let j = 0; j < optionCategory.length; j++) {
+        if (arr[i] == optionCategory[j].value) {
+          catArr.push(optionCategory[j])
+        }
+      }
+    }
+    return catArr;
+  },
+  getCatBySlug (slug) {
+    for (let j = 0; j < optionCategory.length; j++) {
+      if (slug == optionCategory[j].slug) {
+        return optionCategory[j];
+      }
+    }
+    return false;
   },
   showBootstrapModal(modalId, canClose) {
     const body = document.querySelector("body");

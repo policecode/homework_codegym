@@ -1,16 +1,14 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { AiOutlineDashboard } from "react-icons/ai";
-import { BsFolder2 } from "react-icons/bs";
-import { CiViewTable } from "react-icons/ci";
-import { FaChevronLeft, FaRegChartBar, FaRegLaughSquint } from "react-icons/fa";
+import { FaChevronLeft, FaRegLaughSquint } from "react-icons/fa";
 import { IoMdContacts } from "react-icons/io";
-import { LuWrench } from "react-icons/lu";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import LocalStorageHelper from "../../utils/LocalStorageHelper";
 import { IoBookOutline } from "react-icons/io5";
 export default function SideBar() {
-  // let location = useLocation();
-  // console.log(location);
+  let location = useLocation();
+  let collapseItem = location.state?.collapseItem;
+
   let [show, setShow] = useState(() => LocalStorageHelper.getStorage('showSidebar'));
   let [sidebar, setSidebar] = useState(false);
   // useEffect(() => {
@@ -32,14 +30,14 @@ export default function SideBar() {
         id="accordionSidebar"
       >
         <Link
-          to={"/admin"}
+          to={"/"}
           className="sidebar-brand d-flex align-items-center justify-content-center"
         >
           <div className="sidebar-brand-icon rotate-n-15">
             <FaRegLaughSquint />
           </div>
           <div className="sidebar-brand-text mx-3">
-            SB Admin <sup>2</sup>
+            Visit website
           </div>
         </Link>
 
@@ -79,6 +77,7 @@ export default function SideBar() {
               <h6 className="collapse-header">Stories:</h6>
               <NavLink to={"/admin/stories/list"} className="collapse-item">List Story</NavLink>
               <NavLink to={"/admin/stories/create"} className="collapse-item">Create Story</NavLink>
+              <a className={`collapse-item ${collapseItem == 'chaper' ? 'active': 'd-none'}`}>Chaper</a>
             </div>
           </div>
         </li>

@@ -4,11 +4,11 @@ import { Link } from "react-router-dom";
 import { URL_API } from "../../utils/const";
 import Swal from "sweetalert2";
 import axios from "axios";
-import Paging from "../template/Paging";
+import Paging from "../template-admin/Paging";
 import { MdAutoFixNormal } from "react-icons/md";
 import UpdateContact from "./UpdateContact";
 import { GoTriangleDown, GoTriangleUp } from "react-icons/go";
-import SortIcon from "../template/SortIcon";
+import SortIcon from "../template-admin/SortIcon";
 import { useDispatch } from "react-redux";
 import loadingSlice from "../../redux-tolkit/loadingSlice";
 // https://github.com/typicode/json-server/tree/v0

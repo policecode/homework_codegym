@@ -27,18 +27,11 @@ const schema = yup.object({
 
 })
 const animatedComponents = makeAnimated();
-const convertSelectToString = (selectMuti) => {
-  let str = '';
-  selectMuti.forEach(selectObj => {
-    str += `${selectObj.value}, `
-  });
-  return str;
-}
+
 export default function CreateStories() {
   useEffect(() => {
     document.title = "Create Stories";
   }, []);
-  const [selectCat, setSelectCat] = useState(); 
   const dispatch = useDispatch();
   let navigate = useNavigate();
   const { register, watch, handleSubmit, setValue, formState: { errors }, reset } = useForm({
@@ -55,8 +48,10 @@ export default function CreateStories() {
     }
   });
   const watchThumbnail = watch('thumbnail', thumbnailDefault);
+  const setValueSelectCat = (valueCatArr) => {
+    setValue('category', JsCoreHelper.convertSelectToString(valueCatArr))
+  }
   const handleSubmitForm = async (values) => {
-    values.category = convertSelectToString(selectCat);
     values.created_at = dayjs().format('YYYY-MM-DD HH:mm:ss');
     values.updated_at = dayjs().format('YYYY-MM-DD HH:mm:ss');
     dispatch(loadingSlice.actions.loadingShow());
@@ -117,7 +112,7 @@ export default function CreateStories() {
             <div className="col-6 mb-3">
               <label className="form-label">Thể loại</label>
               <Select
-                onChange={(value) => setSelectCat(value)}
+                onChange={setValueSelectCat}
                 closeMenuOnSelect={false}
                 components={animatedComponents} 
                 isMulti
