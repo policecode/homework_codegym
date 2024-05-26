@@ -1,6 +1,21 @@
+import axios from "axios";
+import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { URL_API } from "../../utils/const";
 
-export default function RenderListChapers({type, slugChaper, chapers, slugStory}) {
+export default function RenderListChapers({type, slugChaper, storyId, slugStory}) {
+    let [chapers, setChapers] = useState([]);
+    useEffect(()=>{
+        getData();
+      }, []);
+    let getData = async () => {
+        let response = await axios.get(
+            `${URL_API.baseApiUrl}chapers/?story_id=${storyId}`
+        );
+        if (response.status == 200) {
+            setChapers(response.data);
+        }
+    }
     if (type == 'select') {
         // eslint-disable-next-line react-hooks/rules-of-hooks
         let navigate = useNavigate();

@@ -42,7 +42,7 @@ export default function FormSearch() {
     };
   return (
     <>
-      <div className="position-relative">
+      <div className="position-relative z-3">
         <input 
           onInput={handleSearch}
           onBlur={() => setItems([])}

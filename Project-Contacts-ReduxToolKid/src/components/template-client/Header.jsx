@@ -22,7 +22,7 @@ export default function Header() {
               </Link>
             </div>
             <div className="col-3">
-              <CategorySelect />
+              <CategorySelect type={'select'}/>
             </div>
             <div className="col-4">
               <FormSearch />

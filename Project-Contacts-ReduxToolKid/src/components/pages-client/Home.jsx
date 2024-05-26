@@ -1,6 +1,9 @@
 import RenderListStories from "../stories-client/RenderListStories";
+import StoryRead from "../stories-client/StoryRead";
+import CategorySelect from "../template-client/part/CategorySelect";
 
 export default function Home() {
+    document.title = 'Trang chủ';
  
     return (
         <div className="container">
@@ -8,7 +11,11 @@ export default function Home() {
                 <div className="col-9">
                     <RenderListStories />
                 </div>
-                <div className="col-3"></div>
+                <div className="col-3">
+                    <StoryRead />
+                    <br />
+                    <CategorySelect type={'list'}/>
+                </div>
             </div>
         </div>
     )
