@@ -12,7 +12,7 @@ import { FaComment } from "react-icons/fa";
 import { AiFillLike } from "react-icons/ai";
 const schema = yup.object({
     comment: yup.string().required('Không được để trống').min(5, 'Không được ít hơn 5 ký tự'),
-})
+});
 export default function CommentStory({ storyId }) {
     const auth = useSelector(authSelector);
     let [comments, setComments] = useState([]);
@@ -20,9 +20,12 @@ export default function CommentStory({ storyId }) {
     let [loadComment, setLoadComment] = useState(false);
     useEffect(() => {
         getData();
-        setInterval(() => {
-            getData('interval');
-        }, 3000)
+        // let commentInterval = setInterval(() => {
+        //     getData('interval');
+        // }, 3000)
+        return () => {
+            // clearInterval(commentInterval);
+        }
     }, []);
     const { register, watch, handleSubmit, setValue, getValues, formState: { errors }, reset } = useForm({
         mode: 'onBlur',

@@ -12,6 +12,10 @@ const authSlice = createSlice({
         logout: () => {
             LocalStorageHelper.setStorage("authentication", {});
             return {};
+        }, 
+        update: (state, action) => {
+            LocalStorageHelper.setStorage("authentication", action.payload);
+            return action.payload;
         }
     }
 })

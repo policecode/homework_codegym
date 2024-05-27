@@ -4,7 +4,7 @@ import CategorySelect from "../template-client/part/CategorySelect";
 
 export default function Home() {
     document.title = 'Trang chủ';
- 
+   JSON.stringify
     return (
         <div className="container">
             <div className="row">

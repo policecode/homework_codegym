@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 
 export default function RenderListStories(props) {
   const { catValue } = props;
-  console.log(catValue);
+  // console.log(catValue);
   const dispatch = useDispatch();
   let [items, setItems] = useState([]);
   // let [itemDetail, setItemDetail] = useState({});

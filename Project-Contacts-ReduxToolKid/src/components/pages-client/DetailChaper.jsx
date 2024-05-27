@@ -54,7 +54,7 @@ export default function DetailChaper() {
           slugStory={params.slugStory}
         /> : ''
       }
-      <p >{detailChaper?.content}</p>
+      <div dangerouslySetInnerHTML={{__html: detailChaper?.content}} />
 
       {params.slugChaper && params.slugStory && detailStory?.id ?
         <RenderListChapers
